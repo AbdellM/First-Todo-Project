@@ -1,0 +1,65 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: aliceblue;
+}
+
+body {
+  background-color: #191919;
+}
+
+.title {
+  height: 50px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 50px;
+}
+
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.list,
+.addTask {
+  width: 45%;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.todoNbr {
+  height: 50px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 50px;
+}
+
+.button {
+  color: #191919;
+  padding: 5px;
+}
+
+input,
+button {
+  padding: 5px;
+  border-radius: 5px;
+  outline: none;
+  color: black;
+}
+.done {
+  background-color: green;
+}
+.x {
+  background-color: red;
+}
+.taskDone {
+  color: green;
+}
+.taskNotYet {
+  background-color: grey;
+  color: black;
+}
