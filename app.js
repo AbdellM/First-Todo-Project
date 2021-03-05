@@ -1,32 +1,103 @@
 const listTask  = document.querySelector('.list ul');
 const button    = document.querySelector('.button');
-const taskNbr   = document.querySelector('.todoNbr h3 b');
 const todoInput = document.querySelector(".inputText");
-const task      = listTask.children;
 
+//LOAD TASK STORED IN LOCAL
+document.addEventListener("DOMContentLoaded", getTodos);
+
+// Button to add to each TASK
+const buttons     = document.createElement('div');
+buttons.innerHTML = '<button class="doneBtn"><i class="fas fa-check-square"></i></button><button class="removeBtn"><i class="far fa-trash-alt"></i></button>';
+buttons.classList.add('buttons');
+
+//ADD NEW TASK
 button.addEventListener('click',function(e){
     e.preventDefault();
+
     const newTask = document.createElement('li');
-    newTask.innerHTML = '<button class="x">X</button><button class="done">DONE</button>' + todoInput.value;
+    const text    = document.createElement('p');
+
+    text.innerHTML    = todoInput.value;
+    newTask.innerHTML = text.outerHTML + buttons.outerHTML;
+
+    saveLocalTodos(todoInput.value);
+
     listTask.append(newTask);
-    taskNbr.innerText = task.length;
     todoInput.value = "";
-    newTask.children[0].addEventListener('click', function (e){
-        e.path[1].remove();
-    });
-    newTask.children[1].addEventListener('click', function (e){
-        e.path[0].classList.toggle("taskDone");
-        e.target.classList.toggle("taskNotYet");
-        const text = e.target;
-        const curText = "DONE";
-        if(this.innerText == curText){
-            text.innerText = "Not Done Yet ! ";
-        }
-        else{
-            text.innerText = curText;
-        }
-    });
 });
+
+//DELETE A TASK
+listTask.addEventListener('click', function (e){
+    const item = e.target;
+    const text = item.parentElement.parentElement.children[0].innerText;
+    if(item.classList == 'removeBtn'){
+        item.parentElement.parentElement.remove();
+        removeLocalTodos(text);
+    }
+});
+
+//SWITCH BETWEEN DONE AND UNDONE TASK
+listTask.addEventListener('click', function (e){
+    const item = e.target;
+    const text = item.parentElement.parentElement.children[0];
+    
+    if (item.classList.contains("doneBtn")){
+        item.classList.toggle("notYetBtn");
+        text.classList.toggle("taskDone");
+    }
+});
+
+//LOCAL STORAGE
+function saveLocalTodos(todo) {
+    let todos;
+    if (localStorage.getItem("todos") === null) {
+      todos = [];
+    } 
+    else {
+      todos = JSON.parse(localStorage.getItem("todos"));
+    }
+    todos.push(todo);
+    localStorage.setItem("todos", JSON.stringify(todos));
+}
+
+function removeLocalTodos(todo) {
+    let todos;
+    if (localStorage.getItem("todos") === null) {
+      todos = [];
+    }
+    else {
+      todos = JSON.parse(localStorage.getItem("todos"));
+    }
+    // console.log(todos.indexOf(todo));
+    todos.splice(todos.indexOf(todo), 1);
+    localStorage.setItem("todos", JSON.stringify(todos));
+}
+  
+function getTodos() {
+    let todos;
+    if (localStorage.getItem("todos") === null) {
+      todos = [];
+    } 
+    else {
+      todos = JSON.parse(localStorage.getItem("todos"));
+    }
+    todos.forEach(function(todo) {
+
+    // Button to add to each TASK
+    const buttons     = document.createElement('div');
+    buttons.innerHTML = '<button class="doneBtn"><i class="fas fa-check-square"></i></button><button class="removeBtn"><i class="far fa-trash-alt"></i></button>';
+    buttons.classList.add('buttons');
+
+    //ADD NEW TASK
+    const newTask = document.createElement('li');
+    const text    = document.createElement('p');
+
+    text.innerHTML    = todo;
+    newTask.innerHTML = text.outerHTML + buttons.outerHTML;
+
+    listTask.append(newTask);
+    });
+}
 
 
 
